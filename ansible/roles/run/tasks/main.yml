@@ -1,0 +1,20 @@
+- include_tasks: hotfixes.yml
+
+- include_tasks: configure.yml
+
+- name: make sure cassandra is restarted
+  service:
+    name: cassandra
+    state: restarted
+    enabled: "yes"
+
+# - name: Pause
+#   pause:
+#     seconds: 300  
+
+- name: wait for client port to open
+  wait_for:
+    host: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+    port: 9042
+    delay: 10
+    timeout: 300

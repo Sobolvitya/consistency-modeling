@@ -6,6 +6,7 @@ services:
     image: cassandra:4.0    
     container_name: cass1
     hostname: cass1
+    
     healthcheck:
         test: ["CMD", "cqlsh", "-e", "describe keyspaces" ]
         interval: 5s
@@ -30,6 +31,7 @@ services:
     image: cassandra:4.0
     container_name: cass2
     hostname: cass2
+    
     healthcheck:
         test: ["CMD", "cqlsh", "-e", "describe keyspaces" ]
         interval: 5s
@@ -50,6 +52,7 @@ services:
   cass3:
     image: cassandra:4.0
     container_name: cass3
+    
     hostname: cass3
     healthcheck:
         test: ["CMD", "cqlsh", "-e", "describe keyspaces" ]
@@ -66,5 +69,49 @@ services:
     environment: *environment    
     depends_on:
       cass2:    
+        condition: service_healthy
+
+  cass4:
+    image: cassandra:4.0
+    container_name: cass4
+    hostname: cascass4s3
+    
+    healthcheck:
+        test: ["CMD", "cqlsh", "-e", "describe keyspaces" ]
+        interval: 5s
+        timeout: 5s
+        retries: 60
+    networks:
+      - cassandra
+    ports:
+      - "9045:9042"  
+    volumes:
+      - ./cassandra_data/data/cass4:/var/lib/cassandra    
+      - ./cassandra_data/etc/cass4:/etc/cassandra    
+    environment: *environment    
+    depends_on:
+      cass3:    
+        condition: service_healthy
+  
+  cass5:
+    image: cassandra:4.0
+    container_name: cass5
+    
+    hostname: cass5
+    healthcheck:
+        test: ["CMD", "cqlsh", "-e", "describe keyspaces" ]
+        interval: 5s
+        timeout: 5s
+        retries: 60
+    networks:
+      - cassandra
+    ports:
+      - "9046:9042"  
+    volumes:
+      - ./cassandra_data/data/cass5:/var/lib/cassandra    
+      - ./cassandra_data/etc/cass5:/etc/cassandra    
+    environment: *environment    
+    depends_on:
+      cass4:    
         condition: service_healthy
 

@@ -1,0 +1,9 @@
+- include_tasks: install.yml
+
+- include_tasks: hotfixes.yml
+
+- name: make sure cassandra is stopped
+  service:
+    name: cassandra
+    state: stopped
+    enabled: "yes"

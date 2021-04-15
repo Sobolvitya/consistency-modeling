@@ -1,50 +1,59 @@
+import logging
 import time
+from typing import Optional
 
 from cassandra import ConsistencyLevel
-from cassandra.cluster import Cluster, ExecutionProfile, EXEC_PROFILE_DEFAULT
-from cassandra.policies import WhiteListRoundRobinPolicy, NeverRetryPolicy
-from cassandra.query import tuple_factory
-import logging
-import commons
-import plot_utils
-from gathering_result import GatheringResult
+from cassandra.cluster import Cluster, Session
+from cassandra.query import SimpleStatement
+from retry import retry
 
-logging.basicConfig(level=logging.INFO)
+import commons
+from experiments_data_objects import GatheringResult
+
+log_format = '[%(levelname)s][%(process)d] %(asctime)s.%(msecs)03d: %(message)s'
+logging.basicConfig(
+    format=log_format,
+    level=logging.INFO,
+    datefmt="%H:%M:%S"
+)
+
+@retry(tries=3, delay=2)
+def connect_cluster(cluster_ip) -> Optional[Session]:
+    cluster = Cluster([cluster_ip], connect_timeout=30, control_connection_timeout=10)
+    session: Optional[Session] = cluster.connect(wait_for_all_pools=False)
+    return session
 
 
 class WriteGatheringTask:
 
-    def __init__(self):
-        self.profile = ExecutionProfile(
-            load_balancing_policy=WhiteListRoundRobinPolicy(['127.0.0.1']),
-            retry_policy=NeverRetryPolicy(),
-            consistency_level=ConsistencyLevel.ONE,
-            serial_consistency_level=ConsistencyLevel.LOCAL_SERIAL,
-            request_timeout=15,
-            row_factory=tuple_factory
-        )
-
-        self.cluster = Cluster(port=9042, execution_profiles={EXEC_PROFILE_DEFAULT: self.profile})
-        self.session = self.cluster.connect('records', wait_for_all_pools=True)
-        logging.info('WRITE Cluster connection is created')
+    def __init__(self,
+                 consistency_level: ConsistencyLevel,
+                 write_delay_ms: int,
+                 table_name: str,
+                 node_ip: str):
+        self.consistency_level = consistency_level
+        self.ip = node_ip
+        self.write_delay_s = write_delay_ms / 1000
+        self.table_name = table_name
+        logging.info('WRITE Cluster connection is created for %s', self.table_name)
 
     def gather_stats(self, number_of_iterations: int) -> GatheringResult:
+        session = connect_cluster(cluster_ip=self.ip)
         results: list = [(0, 0) for _ in range(0, number_of_iterations)]
-        logging.info("Start gathering WRITE results")
+        logging.info("Start gathering WRITE results into %s", self.table_name)
         for i in range(0, number_of_iterations):
-            time.sleep(1)
-            self.session.execute(
-                """         
-                    UPDATE Records.tbl_Records
-                    SET version = %s
-                    where id = 1
-                """, [i])
-            results[i] = (commons.current_milli_time_ms(), i)
-        logging.info("Finished gathering Write results")
+            time.sleep(self.write_delay_s)
+            logging.info("Iteration - {i} out of {max}".format(i=i, max=number_of_iterations))
+            qry = "UPDATE {table_name} SET version = %s where id = 1".format(table_name=self.table_name)
+            query_statement = SimpleStatement(
+                qry,
+                consistency_level=self.consistency_level
+            )
+            session.execute(
+                query_statement, [i])
+            results[i] = (commons.current_time_ms(), i)
+        logging.info("Finished gathering Write results from %s", self.table_name)
+        session.shutdown()
+        return GatheringResult("WRITE", results, self.table_name, self.ip)
 
-        return GatheringResult("WRITE", results)
 
-
-if __name__ == '__main__':
-    res = WriteGatheringTask().gather_stats(100)
-    plot_utils.simple_plot(res.result)

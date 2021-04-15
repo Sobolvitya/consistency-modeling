@@ -1,0 +1,252 @@
+write_ip_d = '104.248.129.241'
+read_ips_d = ['206.189.50.250',
+              '206.81.22.13',
+              '104.248.129.241',
+              '206.189.52.16',
+              '104.248.140.155']
+
+experiment_1 = experiments_data_objects.ExperimentsInputData(
+    experiment_id=1,
+    amount_of_instances=5,
+    replication_factor=5,
+    read_consistency_level='ONE',
+    write_consistency_level='ONE',
+    write_delay_ms=1000,
+    number_of_iterations=50,
+    write_ip=write_ip_d,
+    read_ips=read_ips_d
+)
+
+experiment_2 = experiments_data_objects.ExperimentsInputData(
+    experiment_id=2,
+    amount_of_instances=5,
+    replication_factor=3,
+    read_consistency_level='ALL',
+    write_consistency_level='ALL',
+    write_delay_ms=1000,
+    number_of_iterations=50,
+    write_ip=write_ip_d,
+    read_ips=read_ips_d
+)
+
+experiment_3 = experiments_data_objects.ExperimentsInputData(
+    experiment_id=3,
+    amount_of_instances=5,
+    replication_factor=3,
+    read_consistency_level='QUORUM',
+    write_consistency_level='QUORUM',
+    write_delay_ms=1000,
+    number_of_iterations=20,
+    write_ip='104.248.129.241',
+    read_ips=read_ips_d
+)
+
+experiment_4 = experiments_data_objects.ExperimentsInputData(
+    experiment_id=4,
+    amount_of_instances=5,
+    replication_factor=3,
+    read_consistency_level='QUORUM',
+    write_consistency_level='QUORUM',
+    write_delay_ms=2000,
+    number_of_iterations=50,
+    write_ip='206.189.50.250',
+    read_ips=read_ips_d
+)
+
+experiment_5 = experiments_data_objects.ExperimentsInputData(
+    experiment_id=5,
+    amount_of_instances=5,
+    replication_factor=3,
+    read_consistency_level='QUORUM',
+    write_consistency_level='QUORUM',
+    write_delay_ms=100,
+    number_of_iterations=50,
+    write_ip='206.189.50.250',
+    read_ips=read_ips_d
+)
+
+experiment_6 = experiments_data_objects.ExperimentsInputData(
+    experiment_id=6,
+    amount_of_instances=5,
+    replication_factor=1,
+    read_consistency_level='QUORUM',
+    write_consistency_level='QUORUM',
+    write_delay_ms=100,
+    number_of_iterations=50,
+    write_ip='206.81.22.13',
+    read_ips=read_ips_d
+)
+
+experiment_7 = experiments_data_objects.ExperimentsInputData(
+    experiment_id=7,
+    amount_of_instances=5,
+    replication_factor=2,
+    read_consistency_level='QUORUM',
+    write_consistency_level='QUORUM',
+    write_delay_ms=1000,
+    number_of_iterations=50,
+    write_ip='104.248.129.241',
+    read_ips=read_ips_d
+)
+
+experiment_8 = experiments_data_objects.ExperimentsInputData(
+    experiment_id=8,
+    amount_of_instances=5,
+    replication_factor=5,
+    read_consistency_level='LOCAL_QUORUM',
+    write_consistency_level='LOCAL_QUORUM',
+    write_delay_ms=1000,
+    number_of_iterations=50,
+    write_ip='206.189.52.16',
+    read_ips=read_ips_d
+)
+
+experiment_10 = experiments_data_objects.ExperimentsInputData(
+    experiment_id=9,
+    amount_of_instances=3,
+    replication_factor=3,
+    read_consistency_level='ALL',
+    write_consistency_level='ALL',
+    write_delay_ms=1000,
+    number_of_iterations=50,
+    write_ip='104.248.140.155',
+    read_ips=read_ips_d
+)
+
+
+
+all_experiments = [
+
+]
+
+
+
+# [cassandra-seeds-dc1]
+# 206.189.50.250 ansible_ssh_private_key_file=~/.ssh/digital_okean
+#
+# [cassandra-servers-dc1]
+# 206.81.22.13 ansible_ssh_private_key_file=~/.ssh/digital_okean
+# 104.248.129.241 ansible_ssh_private_key_file=~/.ssh/digital_okean
+#
+# [cassandra-seeds-dc2]
+# 206.189.52.16 ansible_ssh_private_key_file=~/.ssh/digital_okean
+#
+# [cassandra-servers-dc2]
+# 104.248.140.155 ansible_ssh_private_key_file=~/.ssh/digital_okean
+
+#
+#
+# create keyspace Records1
+#     with replication = {'class' : 'NetworkTopologyStrategy', 'test_dc1':3, 'test_dc2':2};
+#
+# USE Records1;
+# CREATE TABLE tbl_Records1
+# (
+#    ID INT PRIMARY KEY
+#   ,version INT
+# );
+#
+# insert into Records1.tbl_Records1(id, version) VALUES (1, 1);
+#
+# create keyspace Records2
+#     with replication = {'class' : 'NetworkTopologyStrategy', 'test_dc1':3};
+#
+# USE Records2;
+# CREATE TABLE tbl_Records2
+# (
+#    ID INT PRIMARY KEY
+#   ,version INT
+# );
+#
+# insert into Records2.tbl_Records2(id, version) VALUES (1, 1);
+#
+#
+# create keyspace Records3
+#     with replication = {'class' : 'NetworkTopologyStrategy', 'test_dc1':3};
+#
+# USE Records3;
+# CREATE TABLE tbl_Records3
+# (
+#    ID INT PRIMARY KEY
+#   ,version INT
+# );
+#
+# insert into Records3.tbl_Records3(id, version) VALUES (1, 1);
+#
+#
+# create keyspace Records4
+#     with replication = {'class' : 'NetworkTopologyStrategy', 'test_dc1':2, 'test_dc1':1};
+#
+# USE Records4;
+# CREATE TABLE tbl_Records4
+# (
+#    ID INT PRIMARY KEY
+#   ,version INT
+# );
+#
+# insert into Records4.tbl_Records4(id, version) VALUES (1, 1);
+#
+# create keyspace Records5
+#     with replication = {'class' : 'NetworkTopologyStrategy', 'test_dc1':3};
+#
+# USE Records5;
+# CREATE TABLE tbl_Records5
+# (
+#    ID INT PRIMARY KEY
+#   ,version INT
+# );
+#
+# insert into Records5.tbl_Records5(id, version) VALUES (1, 1);
+#
+#
+# create keyspace Records6
+#     with replication = {'class' : 'NetworkTopologyStrategy', 'test_dc1':1};
+#
+# USE Records6;
+# CREATE TABLE tbl_Records6
+# (
+#    ID INT PRIMARY KEY
+#   ,version INT
+# );
+#
+# insert into Records6.tbl_Records6(id, version) VALUES (1, 1);
+#
+# create keyspace Records7
+#     with replication = {'class' : 'NetworkTopologyStrategy', 'test_dc1':2};
+#
+# USE Records7;
+# CREATE TABLE tbl_Records7
+# (
+#    ID INT PRIMARY KEY
+#   ,version INT
+# );
+#
+# insert into Records7.tbl_Records7(id, version) VALUES (1, 1);
+#
+#
+# create keyspace Records8
+#     with replication = {'class' : 'NetworkTopologyStrategy', 'test_dc1':3, 'test_dc2':2};
+#
+# USE Records8;
+# CREATE TABLE tbl_Records8
+# (
+#    ID INT PRIMARY KEY
+#   ,version INT
+# );
+#
+# insert into Records8.tbl_Records8(id, version) VALUES (1, 1);
+#
+#
+#
+# create keyspace Records9
+#     with replication = {'class' : 'NetworkTopologyStrategy', 'test_dc1':1, 'test_dc2':2};
+#
+# USE Records9;
+# CREATE TABLE tbl_Records9
+# (
+#    ID INT PRIMARY KEY
+#   ,version INT
+# );
+#
+# insert into Records9.tbl_Records9(id, version) VALUES (1, 1);
+#

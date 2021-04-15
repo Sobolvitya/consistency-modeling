@@ -1,0 +1,55 @@
+---
+
+- hosts: cassandra-seeds-dc1
+  gather_facts: yes
+  remote_user: root # only for testing purposes
+  become: yes
+  vars:
+    cluster_name: Test_Cluster
+    seeds: 167.71.48.223,178.128.113.62
+    cassandra_2356_workaround: True
+    cassandra_dc: test_dc1
+    cassandra_rack: test_rack1
+  roles:
+    - run
+
+- hosts: cassandra-seeds-dc2
+  gather_facts: yes
+  remote_user: root # only for testing purposes
+  become: yes
+  vars:
+    cluster_name: Test_Cluster
+    seeds: 167.71.48.223,178.128.113.62
+    cassandra_2356_workaround: True
+    cassandra_dc: test_dc2
+    cassandra_rack: test_rack1
+  roles:
+    - run
+
+- hosts: cassandra-servers-dc1
+  gather_facts: yes
+  remote_user: root # only for testing purposes
+  become: yes
+  serial: 1
+  vars:
+    cluster_name: Test_Cluster
+    seeds: 167.71.48.223,178.128.113.62
+    cassandra_2356_workaround: True
+    cassandra_dc: test_dc1
+    cassandra_rack: test_rack1
+  roles:
+    - run    
+
+- hosts: cassandra-servers-dc2
+  gather_facts: yes
+  remote_user: root # only for testing purposes
+  become: yes
+  serial: 1
+  vars:
+    cluster_name: Test_Cluster
+    seeds: 167.71.48.223,178.128.113.62
+    cassandra_2356_workaround: True
+    cassandra_dc: test_dc2
+    cassandra_rack: test_rack1
+  roles:
+    - run

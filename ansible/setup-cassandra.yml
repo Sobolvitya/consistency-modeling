@@ -1,0 +1,10 @@
+---
+
+- hosts: all
+  gather_facts: yes
+  remote_user: root # only for testing purposes
+  become: yes
+  vars:
+    cassandra_2356_workaround: True
+  roles:
+    - installation

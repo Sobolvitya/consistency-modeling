@@ -1,0 +1,32 @@
+
+# DC1 = FRA 
+# DC2 = SGP
+[cassandra-seeds-dc1]
+167.71.48.223 ansible_ssh_private_key_file=~/.ssh/digital_okean
+
+[cassandra-servers-dc1]
+164.90.170.146 ansible_ssh_private_key_file=~/.ssh/digital_okean
+164.90.162.132 ansible_ssh_private_key_file=~/.ssh/digital_okean
+167.71.51.73 ansible_ssh_private_key_file=~/.ssh/digital_okean
+167.172.175.190 ansible_ssh_private_key_file=~/.ssh/digital_okean
+164.90.160.153 ansible_ssh_private_key_file=~/.ssh/digital_okean
+164.90.170.45 ansible_ssh_private_key_file=~/.ssh/digital_okean
+164.90.164.236 ansible_ssh_private_key_file=~/.ssh/digital_okean
+167.172.163.152 ansible_ssh_private_key_file=~/.ssh/digital_okean
+167.172.163.21 ansible_ssh_private_key_file=~/.ssh/digital_okean
+
+[cassandra-seeds-dc2]
+178.128.113.62 ansible_ssh_private_key_file=~/.ssh/digital_okean
+
+[cassandra-servers-dc2]
+178.128.113.141 ansible_ssh_private_key_file=~/.ssh/digital_okean
+178.128.126.251 ansible_ssh_private_key_file=~/.ssh/digital_okean
+178.128.113.154 ansible_ssh_private_key_file=~/.ssh/digital_okean
+178.128.113.31 ansible_ssh_private_key_file=~/.ssh/digital_okean
+178.128.113.13 ansible_ssh_private_key_file=~/.ssh/digital_okean
+178.128.113.158 ansible_ssh_private_key_file=~/.ssh/digital_okean
+178.128.113.167 ansible_ssh_private_key_file=~/.ssh/digital_okean
+178.128.113.103 ansible_ssh_private_key_file=~/.ssh/digital_okean
+178.128.113.110 ansible_ssh_private_key_file=~/.ssh/digital_okean
+
+

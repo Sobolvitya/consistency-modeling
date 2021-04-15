@@ -1,0 +1,40 @@
+- name: install transport https
+  apt:
+    name: apt-transport-https
+    state: present
+
+- name: install java
+  apt:
+    update_cache: yes
+    name: openjdk-8-jre-headless
+    state: present
+
+- name: Add the Apache Apt Keys
+  apt_key:
+    keyserver: pool.sks-keyservers.net
+    id: "{{ key }}"
+  register: cassandra_remote_status
+  until: cassandra_remote_status is succeeded
+  delay: "10"
+  retries: "5"
+  loop:
+    - A278B781FE4B2BDA
+    - E91335D77E3E87CB
+    - F1000962B7F6840C
+  loop_control:
+    loop_var: key
+
+
+- name: Configure the Apache Cassandra Apt Repository
+  apt_repository:
+    filename: /etc/apt/sources.list.d/cassandra.sources
+    repo: "deb http://www.apache.org/dist/cassandra/debian 39x main"
+    state: present
+
+- name: install cassandra
+  apt:
+    name: cassandra
+    cache_valid_time: 600
+
+
+
